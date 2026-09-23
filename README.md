@@ -2,6 +2,8 @@
 
 Plataforma de agentes de IA para conduzir o ciclo completo de desenvolvimento de software no Kiro IDE, do refinamento de negócio à implementação autônoma, com governança, evidências e pontos explícitos de decisão humana.
 
+![Arquitetura da plataforma agêntica AISDLC](docs/assets/aisdlc-agentic-architecture.png)
+
 ## Estado
 
 Esta é a fundação executável da plataforma. Ela inclui agentes especializados, skills reutilizáveis, steering, hooks, configurações de autonomia, templates, ferramentas locais e uma spec piloto que documenta o próprio bootstrap.
@@ -115,17 +117,19 @@ Stacks específicas são atendidas por pacotes independentes com seu próprio co
 
 ```powershell
 npm run specialist -- list
-npm run specialist -- detect --target C:\Github\meu-servico
-npm run specialist -- install ai-kotlin-backend --target C:\Github\meu-servico
-npm run specialist -- install ai-web-react --target C:\Github\meu-app-react
-npm run specialist -- install ai-web-angular --target C:\Github\meu-app-angular
-npm run specialist -- install ai-kotlin-android --target C:\Github\meu-app-android
-npm run specialist -- install ai-database --target C:\Github\meu-servico
-npm run specialist -- install ai-sre --target C:\Github\meu-servico
-npm run specialist -- install ai-terraform --target C:\Github\minha-infra
+npm run specialist -- detect --target C:\MyPath\meu-servico
+npm run specialist -- install ai-kotlin-backend --target C:\MyPath\meu-servico
+npm run specialist -- install ai-web-react --target C:\MyPath\meu-app-react
+npm run specialist -- install ai-web-angular --target C:\MyPath\meu-app-angular
+npm run specialist -- install ai-kotlin-android --target C:\MyPath\meu-app-android
+npm run specialist -- install ai-database --target C:\MyPath\meu-servico
+npm run specialist -- install ai-sre --target C:\MyPath\meu-servico
+npm run specialist -- install ai-terraform --target C:\MyPath\minha-infra
+npm run specialist -- install ai-aws --target C:\MyPath\minha-infra
+npm run specialist -- install ai-kubernetes --target C:\MyPath\minha-plataforma
 ```
 
-Os pacotes disponíveis cobrem backend Kotlin, Android/Kotlin, React, Angular, bancos de dados, SRE e Terraform. Todos vivem em repositórios irmãos com agentes, skills, steering, hooks e quality gates próprios, preservando tecnologias e convenções do projeto consumidor. Veja [docs/specialists.md](docs/specialists.md).
+Os pacotes disponíveis cobrem backend Kotlin, Android/Kotlin, React, Angular, bancos de dados, SRE, Terraform, AWS e Kubernetes. AWS e Kubernetes declaram companions e colaboram com Terraform sem misturar decisões de domínio com ownership de HCL e state. Todos vivem em repositórios irmãos com contexto próprio. Veja [docs/specialists.md](docs/specialists.md).
 
 ## Steering
 

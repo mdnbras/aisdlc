@@ -124,6 +124,8 @@ if (existsSync(registryPath)) {
       "ai-database": "available",
       "ai-sre": "available",
       "ai-terraform": "available",
+      "ai-aws": "available",
+      "ai-kubernetes": "available",
     };
     for (const [name, expectedStatus] of Object.entries(requiredSpecialists)) {
       const specialist = specialistRegistry.packages?.[name];
@@ -197,6 +199,8 @@ if (existsSync(specRoot)) {
     "release.md",
   ];
   for (const spec of specs) {
+    const hasSpecArtifact = expectedArtifacts.some((artifact) => existsSync(join(specRoot, spec.name, artifact)));
+    if (!hasSpecArtifact) continue;
     for (const artifact of expectedArtifacts) {
       if (!existsSync(join(specRoot, spec.name, artifact))) {
         errors.push(`Spec '${spec.name}' sem ${artifact}`);

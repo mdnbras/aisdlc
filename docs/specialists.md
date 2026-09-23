@@ -35,6 +35,8 @@ npm run specialist -- install ai-kotlin-android --target C:\MyPath\meu-app-andro
 npm run specialist -- install ai-database --target C:\MyPath\meu-servico
 npm run specialist -- install ai-sre --target C:\MyPath\meu-servico
 npm run specialist -- install ai-terraform --target C:\MyPath\minha-infra
+npm run specialist -- install ai-aws --target C:\MyPath\minha-infra
+npm run specialist -- install ai-kubernetes --target C:\MyPath\minha-plataforma
 npm run specialist -- uninstall ai-kotlin-backend --target C:\MyPath\meu-servico
 ```
 
@@ -76,5 +78,15 @@ Subagentes não são confiados automaticamente; o Kiro continua pedindo aprovaç
 - `ai-database`: disponível.
 - `ai-sre`: disponível.
 - `ai-terraform`: disponível.
+- `ai-aws`: disponível.
+- `ai-kubernetes`: disponível.
 
 Mais de um pacote pode ser instalado no mesmo workspace. Os namespaces dos agentes e os prefixos de steering e hooks evitam colisões, enquanto skills usam nomes exclusivos por stack.
+
+## Colaboração entre especialistas
+
+O campo `recommendedWith` no registry e `companions` no manifesto documentam combinações. A instalação continua explícita: o compositor informa companions, mas nunca os instala automaticamente.
+
+- AWS + Terraform: AWS define serviços, IAM, rede, requisitos e revisão Well-Architected; Terraform mantém módulos, HCL, providers, state e testes.
+- Kubernetes + AWS + Terraform: Kubernetes mantém contratos de cluster, add-ons e workloads; AWS cobre integrações EKS; Terraform implementa infraestrutura.
+- O `sdlc-orchestrator` mantém requisitos, gates, evidências e release em todos os casos.
