@@ -38,6 +38,10 @@ Multi-root é útil para indexação, mas hooks de arquivo são ligados ao root 
 
 O pacote não fixa Spring ou Ktor, nem Gradle ou Maven. Ele inspeciona a stack e reutiliza padrões locais. O quality runner escolhe wrapper e executa comandos configuráveis em `quality.json`.
 
+## Web
+
+React e Angular são pacotes separados, mas compartilham o mesmo contrato de composição. Cada quality runner detecta npm, pnpm, Yarn ou Bun e executa somente scripts declarados pelo projeto consumidor. O especialista React não fixa framework, roteador ou biblioteca de estado; o Angular respeita a versão e só usa APIs modernas quando suportadas pelo workspace.
+
 ## Decisões
 
 ### DEC-001 - Copiar exports com estado gerenciado
@@ -56,9 +60,13 @@ O pacote não fixa Spring ou Ktor, nem Gradle ou Maven. Ele inspeciona a stack e
 - **Decisão:** pacotes diferentes em vez de um especialista web genérico.
 - **Consequência:** steering, build, testes e arquitetura podem evoluir sem condicionais excessivas.
 
+### DEC-004 - Quality gates orientados pelo projeto
+
+- **Decisão:** detectar o gerenciador e executar apenas scripts existentes no `package.json`.
+- **Consequência:** o pacote não introduz ferramentas globais nem presume Vitest, Jest, Karma, Playwright ou Cypress.
+
 ## Aprovação
 
 - **Decisão:** requested-by-user
 - **Responsável:** usuário
 - **Data:** 2026-09-23
-

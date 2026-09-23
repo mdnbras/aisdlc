@@ -23,7 +23,7 @@
 ### EVD-003 - Registro e detecção
 
 - **Comandos:** `npm run specialist -- list` e `detect` contra fixture Kotlin.
-- **Resultado:** Kotlin disponível; React e Angular planejados; Kotlin detectado por build e código.
+- **Resultado:** Kotlin, React e Angular disponíveis; cada stack detectada por seus sinais próprios.
 - **Cobre:** AC-004 a AC-006.
 
 ### EVD-004 - Instalação e atualização
@@ -42,15 +42,27 @@
 
 - **Resultado:** pacote desinstalado e workspace temporário removido sem deixar artefatos.
 
+### EVD-007 - Validação dos pacotes web
+
+- **Comandos:** `npm run validate` e `npm run quality` em `ai-web-react` e `ai-web-angular`.
+- **Resultado:** ambos válidos, cada um com 7 agents, 8 skills e 1 arquivo de hooks; ausência de scripts no repositório do pacote tratada como aviso controlado.
+- **Cobre:** AC-001 a AC-003, AC-012, AC-018 a AC-020.
+
+### EVD-008 - Composição web conjunta
+
+- **Procedimento:** detectar React e Angular em fixture híbrida, instalar ambos, executar seus quality runners e desinstalar os dois.
+- **Resultado:** os dois pacotes foram detectados e instalados com 26 arquivos cada; `lint`, `typecheck`, `test:ci` e `build` passaram nos dois runners; zero divergências de checksum; remoção concluída sem colisões.
+- **Cobre:** AC-004 a AC-010, AC-021.
+
 ## Validações não executadas
 
 - Publicação e clone do repositório remoto.
-- Execução de `gradlew check` ou `mvnw verify` em um backend real.
+- Execução de quality gates em projetos Kotlin, React e Angular reais.
 - Spawn do subagente no Kiro IDE atual.
 
 ## Riscos residuais
 
-- A URL remota ainda não existe no registro.
+- As URLs remotas ainda não existem no registro.
 - O Kiro local permanece anterior à versão usada como referência e `.kiro` ainda depende de privilégio do Windows.
 - O quality gate real depende das tarefas configuradas no projeto consumidor.
 
@@ -59,4 +71,3 @@
 - **Decisão:** ready-for-user-review
 - **Responsável:** usuário
 - **Data:** TBD
-

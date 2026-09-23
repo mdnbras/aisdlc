@@ -232,6 +232,21 @@ async function findExtension(root, extensions, depth = 0) {
   return null;
 }
 
+async function findFileName(root, fileNames, depth = 0) {
+  if (depth > 6) return null;
+  const ignored = new Set([".git", ".idea", ".kiro", "build", "dist", "node_modules", "target"]);
+  for (const entry of await readdir(root, { withFileTypes: true })) {
+    if (ignored.has(entry.name)) continue;
+    const path = join(root, entry.name);
+    if (entry.isFile() && fileNames.includes(entry.name)) return path;
+    if (entry.isDirectory()) {
+      const match = await findFileName(path, fileNames, depth + 1);
+      if (match) return match;
+    }
+  }
+  return null;
+}
+
 async function detect() {
   const targetRoot = resolve(process.cwd(), option("--target") ?? platformRoot);
   let packageJson = {};
@@ -247,19 +262,24 @@ async function detect() {
   const matches = [];
 
   for (const [name, definition] of Object.entries(registry.packages ?? {})) {
-    const reasons = [];
+    const reasons = new Set();
     for (const file of definition.detection?.files ?? []) {
-      if (await exists(join(targetRoot, file))) reasons.push(`arquivo ${file}`);
+      if (await exists(join(targetRoot, file))) reasons.add(`arquivo ${file.replaceAll("\\", "/")}`);
+    }
+    const fileNames = definition.detection?.fileNames ?? [];
+    if (fileNames.length > 0) {
+      const match = await findFileName(targetRoot, fileNames);
+      if (match) reasons.add(`arquivo ${relative(targetRoot, match).replaceAll("\\", "/")}`);
     }
     for (const dependency of definition.detection?.packageJsonDependencies ?? []) {
-      if (dependencies[dependency]) reasons.push(`dependência ${dependency}`);
+      if (dependencies[dependency]) reasons.add(`dependência ${dependency}`);
     }
     const extensions = definition.detection?.extensions ?? [];
     if (extensions.length > 0) {
       const match = await findExtension(targetRoot, extensions);
-      if (match) reasons.push(`código ${relative(targetRoot, match)}`);
+      if (match) reasons.add(`código ${relative(targetRoot, match).replaceAll("\\", "/")}`);
     }
-    if (reasons.length > 0) matches.push({ name, status: definition.status, reasons });
+    if (reasons.size > 0) matches.push({ name, status: definition.status, reasons: [...reasons] });
   }
 
   if (matches.length === 0) {
@@ -292,4 +312,3 @@ try {
   console.error(error.message);
   process.exit(1);
 }
-

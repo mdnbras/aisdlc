@@ -117,9 +117,15 @@ Stacks específicas são atendidas por pacotes independentes com seu próprio co
 npm run specialist -- list
 npm run specialist -- detect --target C:\Github\meu-servico
 npm run specialist -- install ai-kotlin-backend --target C:\Github\meu-servico
+npm run specialist -- install ai-web-react --target C:\Github\meu-app-react
+npm run specialist -- install ai-web-angular --target C:\Github\meu-app-angular
+npm run specialist -- install ai-kotlin-android --target C:\Github\meu-app-android
+npm run specialist -- install ai-database --target C:\Github\meu-servico
+npm run specialist -- install ai-sre --target C:\Github\meu-servico
+npm run specialist -- install ai-terraform --target C:\Github\minha-infra
 ```
 
-O primeiro pacote disponível é `ai-kotlin-backend`, mantido no repositório irmão `../ai-kotlin-backend`. `ai-web-react` e `ai-web-angular` estão registrados como próximos especialistas. Veja [docs/specialists.md](docs/specialists.md).
+Os pacotes disponíveis cobrem backend Kotlin, Android/Kotlin, React, Angular, bancos de dados, SRE e Terraform. Todos vivem em repositórios irmãos com agentes, skills, steering, hooks e quality gates próprios, preservando tecnologias e convenções do projeto consumidor. Veja [docs/specialists.md](docs/specialists.md).
 
 ## Steering
 

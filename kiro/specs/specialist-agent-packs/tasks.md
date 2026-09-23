@@ -29,15 +29,32 @@
   - Resultado: atualização e remoção bloqueiam arquivo modificado; `--force` explícito funciona
   - Validação: smoke test e limpeza do workspace temporário
 
-- [ ] 6. Publicar repositório e atualizar origem remota
+- [x] 6. Criar pacote ai-web-react
+  - Requisitos: REQ-001, REQ-006
+  - Dependências: 1
+  - Resultado: repositório independente com 7 agentes, 8 skills, 8 steerings, hooks e runtime
+  - Validação: `npm run validate` no pacote
+
+- [x] 7. Criar pacote ai-web-angular
+  - Requisitos: REQ-001, REQ-006
+  - Dependências: 1
+  - Resultado: repositório independente com 7 agentes, 8 skills, 8 steerings, hooks e runtime
+  - Validação: `npm run validate` no pacote
+
+- [x] 8. Validar composição conjunta dos especialistas web
+  - Requisitos: REQ-002, REQ-003, REQ-006
+  - Dependências: 2, 6, 7
+  - Resultado: detecção, instalação, quality gates e remoção sem colisões
+  - Validação: smoke test em workspace híbrido temporário
+
+- [ ] 9. Publicar repositórios e atualizar origens remotas
   - Requisitos: REQ-001
-  - Dependências: 4, 5
-  - Resultado: remote Git oficial registrado no AISDLC
+  - Dependências: 4 a 8
+  - Resultado: remotes Git oficiais registrados no AISDLC
   - Validação: clone limpo e instalação pelo caminho publicado
 
-- [ ] 7. Validar delegação no Kiro IDE atual
-  - Requisitos: REQ-004, REQ-005
-  - Dependências: 2 a 6
-  - Resultado: tarefa Kotlin real executada pelo subagente
+- [ ] 10. Validar delegação no Kiro IDE atual
+  - Requisitos: REQ-004, REQ-005, REQ-006
+  - Dependências: 2 a 9
+  - Resultado: tarefas reais executadas pelos subagentes Kotlin, React e Angular
   - Validação: Kiro atualizado, `.kiro` ativo e evidências na spec
-

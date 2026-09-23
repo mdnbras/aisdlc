@@ -15,12 +15,11 @@ O AISDLC governa o ciclo completo, mas seus agentes generalistas não devem carr
 
 - `OBJ-001`: definir um contrato para especialistas Kiro mantidos em repositórios próprios.
 - `OBJ-002`: detectar e compor especialistas no workspace consumidor quando necessários.
-- `OBJ-003`: entregar o primeiro pacote funcional, `ai-kotlin-backend`.
-- `OBJ-004`: reservar `ai-web-react` e `ai-web-angular` no roadmap.
+- `OBJ-003`: entregar o pacote funcional `ai-kotlin-backend`.
+- `OBJ-004`: entregar os pacotes funcionais `ai-web-react` e `ai-web-angular`.
 
 ## Não objetivos
 
-- Implementar React e Angular nesta entrega.
 - Baixar ou executar automaticamente código remoto não revisado.
 - Tornar especialistas responsáveis por decisões de produto ou release.
 
@@ -29,11 +28,11 @@ O AISDLC governa o ciclo completo, mas seus agentes generalistas não devem carr
 - Um pacote declara exports em `specialist.json` e mantém sua própria `.kiro`.
 - O AISDLC lista, detecta, instala, atualiza e remove pacotes sem sobrescrever mudanças locais silenciosamente.
 - O orquestrador pode delegar a agentes sob o namespace `specialists/`.
-- O pacote Kotlin possui agentes, skills, steering, hooks e quality gate próprios.
+- Os pacotes Kotlin, React e Angular possuem agentes, skills, steering, hooks e quality gates próprios.
+- React e Angular podem ser detectados, instalados simultaneamente e removidos sem colisões.
 
 ## Aprovação
 
 - **Decisão:** requested-by-user
 - **Responsável:** usuário
 - **Data:** 2026-09-23
-

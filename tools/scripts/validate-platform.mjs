@@ -118,8 +118,12 @@ if (existsSync(registryPath)) {
     const specialistRegistry = JSON.parse(await readFile(registryPath, "utf8"));
     const requiredSpecialists = {
       "ai-kotlin-backend": "available",
-      "ai-web-react": "planned",
-      "ai-web-angular": "planned",
+      "ai-web-react": "available",
+      "ai-web-angular": "available",
+      "ai-kotlin-android": "available",
+      "ai-database": "available",
+      "ai-sre": "available",
+      "ai-terraform": "available",
     };
     for (const [name, expectedStatus] of Object.entries(requiredSpecialists)) {
       const specialist = specialistRegistry.packages?.[name];
@@ -130,11 +134,13 @@ if (existsSync(registryPath)) {
       }
     }
 
-    const kotlinSource = specialistRegistry.packages?.["ai-kotlin-backend"]?.source;
-    if (kotlinSource?.type === "local" && kotlinSource.path) {
-      const localSource = resolve(root, kotlinSource.path);
-      if (!existsSync(localSource)) {
-        warnings.push(`Fonte local do ai-kotlin-backend não encontrada em ${localSource}. Use --source ao instalar.`);
+    for (const [name, specialist] of Object.entries(specialistRegistry.packages ?? {})) {
+      const source = specialist.source;
+      if (specialist.status === "available" && source?.type === "local" && source.path) {
+        const localSource = resolve(root, source.path);
+        if (!existsSync(localSource)) {
+          warnings.push(`Fonte local do ${name} não encontrada em ${localSource}. Use --source ao instalar.`);
+        }
       }
     }
   } catch (error) {

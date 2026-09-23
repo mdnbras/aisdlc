@@ -28,27 +28,103 @@
       }
     },
     "ai-web-react": {
-      "status": "planned",
-      "version": null,
-      "description": "Futuro especialista em aplicações web React.",
-      "source": null,
-      "capabilities": ["react", "typescript", "web", "frontend", "testing", "accessibility"],
+      "status": "available",
+      "version": "0.1.0",
+      "description": "Especialista em aplicações React/TypeScript, componentes, estado, testes, acessibilidade e desempenho.",
+      "source": {
+        "type": "local",
+        "path": "../ai-web-react",
+        "repository": null
+      },
+      "capabilities": ["react", "typescript", "web", "frontend", "components", "state", "data-fetching", "testing", "accessibility", "performance"],
       "detection": {
-        "files": ["package.json"],
+        "files": [],
         "extensions": [".tsx", ".jsx"],
         "packageJsonDependencies": ["react"]
       }
     },
     "ai-web-angular": {
-      "status": "planned",
-      "version": null,
-      "description": "Futuro especialista em aplicações web Angular.",
-      "source": null,
-      "capabilities": ["angular", "typescript", "web", "frontend", "testing", "accessibility"],
+      "status": "available",
+      "version": "0.1.0",
+      "description": "Especialista em aplicações Angular/TypeScript, componentes, signals, RxJS, forms, testes e acessibilidade.",
+      "source": {
+        "type": "local",
+        "path": "../ai-web-angular",
+        "repository": null
+      },
+      "capabilities": ["angular", "typescript", "web", "frontend", "components", "signals", "rxjs", "forms", "http", "testing", "accessibility"],
       "detection": {
-        "files": ["angular.json", "package.json"],
+        "files": ["angular.json"],
         "extensions": [".component.ts", ".component.html"],
         "packageJsonDependencies": ["@angular/core"]
+      }
+    },
+    "ai-kotlin-android": {
+      "status": "available",
+      "version": "0.1.0",
+      "description": "Especialista em aplicações Android/Kotlin, UI, dados offline, plataforma, testes e revisão.",
+      "source": {
+        "type": "local",
+        "path": "../ai-kotlin-android",
+        "repository": null
+      },
+      "capabilities": ["android", "kotlin", "jetpack-compose", "views", "coroutines", "offline-first", "testing", "accessibility", "performance"],
+      "detection": {
+        "files": ["app/src/main/AndroidManifest.xml", "app/build.gradle.kts", "app/build.gradle"],
+        "fileNames": ["AndroidManifest.xml"],
+        "extensions": [],
+        "packageJsonDependencies": []
+      }
+    },
+    "ai-database": {
+      "status": "available",
+      "version": "0.1.0",
+      "description": "Especialista em modelagem, schemas, migrações, integridade, performance e operação segura de bancos.",
+      "source": {
+        "type": "local",
+        "path": "../ai-database",
+        "repository": null
+      },
+      "capabilities": ["database", "sql", "schema", "migrations", "data-integrity", "query-performance", "backup-recovery", "security"],
+      "detection": {
+        "files": ["schema.sql", "flyway.conf", "liquibase.properties", "prisma/schema.prisma"],
+        "fileNames": ["schema.sql", "flyway.conf", "liquibase.properties"],
+        "extensions": [".sql", ".prisma"],
+        "packageJsonDependencies": ["prisma", "@prisma/client", "typeorm", "sequelize", "knex", "drizzle-orm"]
+      }
+    },
+    "ai-sre": {
+      "status": "available",
+      "version": "0.1.0",
+      "description": "Especialista em SLOs, observabilidade, incidentes, capacidade, resiliência e release readiness.",
+      "source": {
+        "type": "local",
+        "path": "../ai-sre",
+        "repository": null
+      },
+      "capabilities": ["sre", "slos", "error-budgets", "observability", "incident-response", "capacity", "resilience", "postmortems"],
+      "detection": {
+        "files": ["slo.yaml", "slos.yaml", "prometheus.yml", "prometheus.yaml", "alertmanager.yml", "alertmanager.yaml"],
+        "fileNames": ["slo.yaml", "slos.yaml", "prometheus.yml", "prometheus.yaml", "alertmanager.yml", "alertmanager.yaml", "service.yaml"],
+        "extensions": [".slo.yaml", ".slo.yml", ".rules.yaml", ".rules.yml"],
+        "packageJsonDependencies": []
+      }
+    },
+    "ai-terraform": {
+      "status": "available",
+      "version": "0.1.0",
+      "description": "Especialista em módulos Terraform, providers, state, segurança, testes e revisão de planos.",
+      "source": {
+        "type": "local",
+        "path": "../ai-terraform",
+        "repository": null
+      },
+      "capabilities": ["terraform", "hcl", "iac", "modules", "providers", "state", "policy-as-code", "testing", "plan-review"],
+      "detection": {
+        "files": ["main.tf", "versions.tf", "providers.tf", ".terraform.lock.hcl"],
+        "fileNames": ["main.tf", "versions.tf", "providers.tf", ".terraform.lock.hcl"],
+        "extensions": [".tf", ".tftest.hcl"],
+        "packageJsonDependencies": []
       }
     }
   }
