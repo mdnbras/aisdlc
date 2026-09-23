@@ -119,12 +119,63 @@
         "path": "../ai-terraform",
         "repository": null
       },
+      "recommendedWith": ["ai-aws", "ai-kubernetes"],
       "capabilities": ["terraform", "hcl", "iac", "modules", "providers", "state", "policy-as-code", "testing", "plan-review"],
       "detection": {
         "files": ["main.tf", "versions.tf", "providers.tf", ".terraform.lock.hcl"],
         "fileNames": ["main.tf", "versions.tf", "providers.tf", ".terraform.lock.hcl"],
         "extensions": [".tf", ".tftest.hcl"],
         "packageJsonDependencies": []
+      }
+    },
+    "ai-aws": {
+      "status": "available",
+      "version": "0.1.0",
+      "description": "Especialista em arquitetura e engenharia AWS alinhadas aos seis pilares Well-Architected.",
+      "source": {
+        "type": "local",
+        "path": "../ai-aws",
+        "repository": null
+      },
+      "recommendedWith": ["ai-terraform", "ai-kubernetes"],
+      "capabilities": ["aws", "well-architected", "iam", "networking", "compute", "data", "reliability", "cost-optimization", "sustainability", "terraform"],
+      "detection": {
+        "files": ["template.yaml", "template.yml", "samconfig.toml", "cdk.json", "serverless.yml", "serverless.yaml"],
+        "fileNames": ["samconfig.toml", "cdk.json", "serverless.yml", "serverless.yaml"],
+        "extensions": [".aws.tf"],
+        "packageJsonDependencies": ["aws-cdk-lib", "serverless", "@aws-sdk/client-s3", "@aws-sdk/client-dynamodb"],
+        "contentPatterns": [
+          {
+            "extensions": [".tf", ".tf.json"],
+            "regex": "(?:source\\s*=\\s*\"hashicorp/aws\"|provider\\s+\"aws\"|(?:resource|data)\\s+\"aws_)",
+            "flags": "u"
+          }
+        ]
+      }
+    },
+    "ai-kubernetes": {
+      "status": "available",
+      "version": "0.1.0",
+      "description": "Especialista em workloads e plataformas Kubernetes para EKS e ambientes on-premises.",
+      "source": {
+        "type": "local",
+        "path": "../ai-kubernetes",
+        "repository": null
+      },
+      "recommendedWith": ["ai-aws", "ai-terraform"],
+      "capabilities": ["kubernetes", "eks", "on-premises", "workloads", "helm", "kustomize", "networking", "security", "reliability", "upgrades"],
+      "detection": {
+        "files": ["Chart.yaml", "kustomization.yaml", "kustomization.yml", "helmfile.yaml", "helmfile.yml"],
+        "fileNames": ["Chart.yaml", "kustomization.yaml", "kustomization.yml", "helmfile.yaml", "helmfile.yml"],
+        "extensions": [],
+        "packageJsonDependencies": ["@kubernetes/client-node"],
+        "contentPatterns": [
+          {
+            "extensions": [".yaml", ".yml"],
+            "regex": "^apiVersion:\\s*[^\\r\\n]+[\\s\\S]{0,1000}^kind:\\s*(?:Deployment|StatefulSet|DaemonSet|Job|CronJob|Service|Ingress|ConfigMap|Secret|Namespace|CustomResourceDefinition)\\s*$",
+            "flags": "mu"
+          }
+        ]
       }
     }
   }

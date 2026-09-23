@@ -171,6 +171,9 @@ async function install(name) {
   await writeInstallState(configDirectory, state);
   console.log(`Especialista '${name}' ${manifest.version} instalado em ${configDirectory}.`);
   console.log(`${installedFiles.length} arquivo(s) gerenciado(s).`);
+  if ((definition.recommendedWith ?? []).length > 0) {
+    console.log(`Companions recomendados: ${definition.recommendedWith.join(", ")}.`);
+  }
 }
 
 async function removeEmptyParents(path, boundary) {
@@ -247,6 +250,28 @@ async function findFileName(root, fileNames, depth = 0) {
   return null;
 }
 
+async function findContentPattern(root, patterns, depth = 0) {
+  if (depth > 6) return null;
+  const ignored = new Set([".git", ".idea", ".kiro", ".terraform", "build", "dist", "node_modules", "target"]);
+  for (const entry of await readdir(root, { withFileTypes: true })) {
+    if (ignored.has(entry.name)) continue;
+    const path = join(root, entry.name);
+    if (entry.isFile()) {
+      for (const pattern of patterns) {
+        if (!(pattern.extensions ?? []).some((extension) => entry.name.endsWith(extension))) continue;
+        if ((await stat(path)).size > 512 * 1024) continue;
+        const content = await readFile(path, "utf8");
+        if (new RegExp(pattern.regex, pattern.flags ?? "u").test(content)) return path;
+      }
+    }
+    if (entry.isDirectory()) {
+      const match = await findContentPattern(path, patterns, depth + 1);
+      if (match) return match;
+    }
+  }
+  return null;
+}
+
 async function detect() {
   const targetRoot = resolve(process.cwd(), option("--target") ?? platformRoot);
   let packageJson = {};
@@ -278,6 +303,11 @@ async function detect() {
     if (extensions.length > 0) {
       const match = await findExtension(targetRoot, extensions);
       if (match) reasons.add(`código ${relative(targetRoot, match).replaceAll("\\", "/")}`);
+    }
+    const contentPatterns = definition.detection?.contentPatterns ?? [];
+    if (contentPatterns.length > 0) {
+      const match = await findContentPattern(targetRoot, contentPatterns);
+      if (match) reasons.add(`conteúdo ${relative(targetRoot, match).replaceAll("\\", "/")}`);
     }
     if (reasons.size > 0) matches.push({ name, status: definition.status, reasons: [...reasons] });
   }
