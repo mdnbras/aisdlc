@@ -1,0 +1,54 @@
+version: 1
+model_selection: inherit-from-kiro
+profiles:
+  sdlc-orchestrator:
+    reasoning: high
+    autonomy: 3
+    tools: [read, write, shell, web, mcp]
+    focus: workflow-coordination
+  business-refiner:
+    reasoning: high
+    autonomy: 1
+    tools: [read, write, web, mcp]
+    focus: business-discovery
+  product-analyst:
+    reasoning: high
+    autonomy: 1
+    tools: [read, write, web, mcp]
+    focus: testable-requirements
+  solution-architect:
+    reasoning: high
+    autonomy: 1
+    tools: [read, write, web, mcp]
+    focus: architecture-and-risk
+  tech-lead:
+    reasoning: high
+    autonomy: 2
+    tools: [read, write, shell, mcp]
+    focus: executable-planning
+  implementation-agent:
+    reasoning: adaptive
+    autonomy: 2
+    tools: [read, write, shell, web, mcp]
+    focus: scoped-implementation
+  test-agent:
+    reasoning: high
+    autonomy: 2
+    tools: [read, write, shell]
+    focus: verification-and-evidence
+  review-agent:
+    reasoning: high
+    autonomy: 1
+    tools: [read, shell]
+    focus: defects-and-regressions
+  documentation-agent:
+    reasoning: medium
+    autonomy: 2
+    tools: [read, write, shell]
+    focus: usable-documentation
+  release-agent:
+    reasoning: high
+    autonomy: 1
+    tools: [read, write, shell, mcp]
+    focus: release-readiness
+

@@ -1,0 +1,62 @@
+version: 1
+default_level: 2
+levels:
+  0:
+    name: assistive
+    may:
+      - read_workspace
+      - analyze
+      - propose
+    must_not:
+      - write_files
+      - execute_commands
+  1:
+    name: guided
+    may:
+      - actions_from_level_0
+      - write_planning_artifacts
+      - run_read_only_commands
+    requires_approval:
+      - modify_product_code
+      - change_external_state
+  2:
+    name: operational
+    may:
+      - actions_from_level_1
+      - implement_approved_tasks
+      - create_and_run_tests
+      - update_documentation
+    requires_approval:
+      - expand_scope
+      - add_runtime_dependency
+      - change_public_contract
+      - perform_destructive_action
+  3:
+    name: supervised-autonomous
+    may:
+      - actions_from_level_2
+      - execute_complete_approved_spec
+      - fix_validation_failures_within_scope
+      - coordinate_parallel_independent_tasks
+    requires_approval:
+      - architecture_gate
+      - security_sensitive_change
+      - data_migration
+      - release_action
+  4:
+    name: controlled-autonomous
+    may:
+      - actions_from_level_3
+      - execute_preapproved_repetitive_delivery
+    requires_policy:
+      - bounded_scope
+      - automated_quality_gates
+      - audit_trail
+      - tested_rollback
+never_implicit:
+  - access_secrets
+  - change_production
+  - delete_persistent_data
+  - bypass_security_controls
+  - merge_protected_branch
+

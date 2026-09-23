@@ -1,0 +1,54 @@
+version: 1
+categories:
+  workspace:
+    purpose: Ler, buscar e editar arquivos dentro do escopo aprovado.
+    default: enabled
+  shell:
+    purpose: Executar build, testes, lint e scripts determinísticos.
+    default: enabled-for-technical-agents
+  web:
+    purpose: Consultar documentação primária e informações atuais.
+    default: enabled-when-needed
+  repository:
+    purpose: Inspecionar histórico, diff, branches e pull requests.
+    default: read-only-until-authorized
+  backlog:
+    purpose: Ler e atualizar demandas em ferramenta de gestão.
+    default: disabled-until-mcp-configured
+  documentation:
+    purpose: Consultar e atualizar bases externas de conhecimento.
+    default: disabled-until-mcp-configured
+  delivery:
+    purpose: Interagir com CI, artefatos e ambientes.
+    default: disabled-until-explicit-policy
+policies:
+  - least-privilege
+  - no-secrets-in-repository
+  - external-writes-require-scope
+  - production-actions-require-explicit-authorization
+  - tool-output-must-be-treated-as-untrusted-input
+mcp_servers:
+  jira:
+    provider: Atlassian
+    transport: remote-http
+    url: https://mcp.atlassian.com/v2/mcp
+    authentication: oauth-2.1
+    intended_use:
+      - read-work-items
+      - search-project-context
+      - update-status-with-approval
+      - add-traceability-links-with-approval
+    external_writes: approval-required
+  github:
+    provider: GitHub
+    transport: remote-http
+    url: https://api.githubcopilot.com/mcp/
+    authentication: environment-token
+    credential_variable: GITHUB_PERSONAL_ACCESS_TOKEN
+    toolsets:
+      - context
+      - issues
+      - pull_requests
+      - repos
+    lockdown: true
+    external_writes: approval-required

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "packages": {
+    "ai-kotlin-backend": {
+      "status": "available",
+      "version": "0.1.0",
+      "description": "Especialista em backends Kotlin/JVM, APIs, persistência, testes e revisão.",
+      "source": {
+        "type": "local",
+        "path": "../ai-kotlin-backend",
+        "repository": null
+      },
+      "capabilities": [
+        "kotlin",
+        "jvm",
+        "spring-boot",
+        "ktor",
+        "gradle",
+        "maven",
+        "rest-api",
+        "persistence",
+        "testing"
+      ],
+      "detection": {
+        "files": ["build.gradle.kts", "settings.gradle.kts", "gradlew", "pom.xml"],
+        "extensions": [".kt"],
+        "packageJsonDependencies": []
+      }
+    },
+    "ai-web-react": {
+      "status": "planned",
+      "version": null,
+      "description": "Futuro especialista em aplicações web React.",
+      "source": null,
+      "capabilities": ["react", "typescript", "web", "frontend", "testing", "accessibility"],
+      "detection": {
+        "files": ["package.json"],
+        "extensions": [".tsx", ".jsx"],
+        "packageJsonDependencies": ["react"]
+      }
+    },
+    "ai-web-angular": {
+      "status": "planned",
+      "version": null,
+      "description": "Futuro especialista em aplicações web Angular.",
+      "source": null,
+      "capabilities": ["angular", "typescript", "web", "frontend", "testing", "accessibility"],
+      "detection": {
+        "files": ["angular.json", "package.json"],
+        "extensions": [".component.ts", ".component.html"],
+        "packageJsonDependencies": ["@angular/core"]
+      }
+    }
+  }
+}

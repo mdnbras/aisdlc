@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "jira": {
+      "url": "https://mcp.atlassian.com/v2/mcp",
+      "disabled": false,
+      "autoApprove": []
+    },
+    "github": {
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN}",
+        "X-MCP-Toolsets": "context,issues,pull_requests,repos",
+        "X-MCP-Lockdown": "true"
+      },
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}

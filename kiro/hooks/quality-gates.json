@@ -1,0 +1,26 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Validate AISDLC configuration",
+      "description": "Valida estrutura e formatos após mudanças em arquivos da plataforma.",
+      "trigger": "PostFileSave",
+      "matcher": "^(kiro|configs|templates|tools)[/\\\\]",
+      "action": {
+        "type": "command",
+        "command": "node tools/scripts/validate-platform.mjs"
+      },
+      "timeout": 30
+    },
+    {
+      "name": "Verify task evidence",
+      "description": "Confere rastreabilidade e evidências ao concluir uma tarefa de spec.",
+      "trigger": "PostTaskExecution",
+      "action": {
+        "type": "agent",
+        "prompt": "Revise a tarefa recém-concluída. Confirme que requirements.md, tasks.md e evidence.md mantêm rastreabilidade; que comandos e resultados foram registrados; e que limitações ou riscos residuais estão explícitos. Corrija apenas os artefatos da spec quando houver omissão factual. Não invente evidências nem altere escopo."
+      }
+    }
+  ]
+}
+

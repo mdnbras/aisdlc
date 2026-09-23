@@ -1,0 +1,14 @@
+{
+  "name": "aisdlc",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Plataforma de agentes de IA para SDLC no Kiro IDE",
+  "scripts": {
+    "validate": "node tools/scripts/validate-platform.mjs",
+    "spec:new": "node tools/scripts/create-spec.mjs",
+    "specialist": "node tools/scripts/specialist.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

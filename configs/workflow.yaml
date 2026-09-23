@@ -1,0 +1,83 @@
+version: 1
+artifact_root: kiro/specs
+states:
+  - intake
+  - refining
+  - specified
+  - designed
+  - planned
+  - implementing
+  - validating
+  - reviewing
+  - documenting
+  - release-ready
+  - done
+exception_states:
+  - blocked
+  - rework
+  - cancelled
+stages:
+  - id: business-refinement
+    agent: business-refiner
+    skill: refine-business
+    input: demand
+    output: business-brief.md
+    next_state: refining
+    gate: business-scope
+  - id: product-specification
+    agent: product-analyst
+    skill: write-requirements
+    input: business-brief.md
+    output: requirements.md
+    next_state: specified
+    gate: product-scope
+  - id: solution-design
+    agent: solution-architect
+    skill: design-solution
+    input: requirements.md
+    output: design.md
+    next_state: designed
+    gate: architecture
+  - id: technical-planning
+    agent: tech-lead
+    skill: plan-implementation
+    input: design.md
+    output: tasks.md
+    next_state: planned
+    gate: implementation
+  - id: implementation
+    agent: implementation-agent
+    skill: implement-task
+    input: tasks.md
+    output: workspace-change
+    next_state: implementing
+    gate: risk-based
+  - id: validation
+    agent: test-agent
+    skill: validate-change
+    input: workspace-change
+    output: evidence.md
+    next_state: validating
+    gate: quality
+  - id: review
+    agent: review-agent
+    skill: review-change
+    input: evidence.md
+    output: review-decision
+    next_state: reviewing
+    gate: review
+  - id: documentation
+    agent: documentation-agent
+    skill: document-feature
+    input: approved-change
+    output: documentation-change
+    next_state: documenting
+    gate: documentation
+  - id: release
+    agent: release-agent
+    skill: prepare-release
+    input: documented-change
+    output: release.md
+    next_state: release-ready
+    gate: release-authorization
+
