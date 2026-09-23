@@ -6,9 +6,8 @@
       "version": "0.1.0",
       "description": "Especialista em backends Kotlin/JVM, APIs, persistência, testes e revisão.",
       "source": {
-        "type": "local",
-        "path": "../ai-kotlin-backend",
-        "repository": null
+        "type": "github",
+        "repository": "https://github.com/mdnbras/ai-kotlin-backend.git"
       },
       "capabilities": [
         "kotlin",
@@ -32,9 +31,8 @@
       "version": "0.1.0",
       "description": "Especialista em aplicações React/TypeScript, componentes, estado, testes, acessibilidade e desempenho.",
       "source": {
-        "type": "local",
-        "path": "../ai-web-react",
-        "repository": null
+        "type": "github",
+        "repository": "https://github.com/mdnbras/ai-web-react.git"
       },
       "capabilities": ["react", "typescript", "web", "frontend", "components", "state", "data-fetching", "testing", "accessibility", "performance"],
       "detection": {
@@ -48,9 +46,8 @@
       "version": "0.1.0",
       "description": "Especialista em aplicações Angular/TypeScript, componentes, signals, RxJS, forms, testes e acessibilidade.",
       "source": {
-        "type": "local",
-        "path": "../ai-web-angular",
-        "repository": null
+        "type": "github",
+        "repository": "https://github.com/mdnbras/ai-web-angular.git"
       },
       "capabilities": ["angular", "typescript", "web", "frontend", "components", "signals", "rxjs", "forms", "http", "testing", "accessibility"],
       "detection": {
@@ -64,9 +61,8 @@
       "version": "0.1.0",
       "description": "Especialista em aplicações Android/Kotlin, UI, dados offline, plataforma, testes e revisão.",
       "source": {
-        "type": "local",
-        "path": "../ai-kotlin-android",
-        "repository": null
+        "type": "github",
+        "repository": "https://github.com/mdnbras/ai-kotlin-android.git"
       },
       "capabilities": ["android", "kotlin", "jetpack-compose", "views", "coroutines", "offline-first", "testing", "accessibility", "performance"],
       "detection": {
@@ -81,9 +77,8 @@
       "version": "0.1.0",
       "description": "Especialista em modelagem, schemas, migrações, integridade, performance e operação segura de bancos.",
       "source": {
-        "type": "local",
-        "path": "../ai-database",
-        "repository": null
+        "type": "github",
+        "repository": "https://github.com/mdnbras/ai-database.git"
       },
       "capabilities": ["database", "sql", "schema", "migrations", "data-integrity", "query-performance", "backup-recovery", "security"],
       "detection": {
@@ -98,9 +93,8 @@
       "version": "0.1.0",
       "description": "Especialista em SLOs, observabilidade, incidentes, capacidade, resiliência e release readiness.",
       "source": {
-        "type": "local",
-        "path": "../ai-sre",
-        "repository": null
+        "type": "github",
+        "repository": "https://github.com/mdnbras/ai-sre.git"
       },
       "capabilities": ["sre", "slos", "error-budgets", "observability", "incident-response", "capacity", "resilience", "postmortems"],
       "detection": {
@@ -115,9 +109,8 @@
       "version": "0.1.0",
       "description": "Especialista em módulos Terraform, providers, state, segurança, testes e revisão de planos.",
       "source": {
-        "type": "local",
-        "path": "../ai-terraform",
-        "repository": null
+        "type": "github",
+        "repository": "https://github.com/mdnbras/ai-terraform.git"
       },
       "recommendedWith": ["ai-aws", "ai-kubernetes"],
       "capabilities": ["terraform", "hcl", "iac", "modules", "providers", "state", "policy-as-code", "testing", "plan-review"],
@@ -133,9 +126,8 @@
       "version": "0.1.0",
       "description": "Especialista em arquitetura e engenharia AWS alinhadas aos seis pilares Well-Architected.",
       "source": {
-        "type": "local",
-        "path": "../ai-aws",
-        "repository": null
+        "type": "github",
+        "repository": "https://github.com/mdnbras/ai-aws.git"
       },
       "recommendedWith": ["ai-terraform", "ai-kubernetes"],
       "capabilities": ["aws", "well-architected", "iam", "networking", "compute", "data", "reliability", "cost-optimization", "sustainability", "terraform"],
@@ -158,9 +150,8 @@
       "version": "0.1.0",
       "description": "Especialista em workloads e plataformas Kubernetes para EKS e ambientes on-premises.",
       "source": {
-        "type": "local",
-        "path": "../ai-kubernetes",
-        "repository": null
+        "type": "github",
+        "repository": "https://github.com/mdnbras/ai-kubernetes.git"
       },
       "recommendedWith": ["ai-aws", "ai-terraform"],
       "capabilities": ["kubernetes", "eks", "on-premises", "workloads", "helm", "kustomize", "networking", "security", "reliability", "upgrades"],

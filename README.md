@@ -46,6 +46,13 @@ Não mantenha uma pasta real `.kiro` em paralelo. Isso criaria duas fontes de co
 
 ## Início rápido
 
+Clone o repositório público da plataforma:
+
+```bash
+git clone https://github.com/mdnbras/aisdlc.git
+cd aisdlc
+```
+
 1. Crie o link simbólico correspondente ao seu sistema operacional.
 2. Copie `kiro/settings/mcp.sample.json` para `kiro/settings/mcp.json` e configure a autenticação dos MCPs conforme `docs/integrations.md`.
 3. Valide a instalação com `npm run validate`.
@@ -129,7 +136,7 @@ npm run specialist -- install ai-aws --target C:\MyPath\minha-infra
 npm run specialist -- install ai-kubernetes --target C:\MyPath\minha-plataforma
 ```
 
-Os pacotes disponíveis cobrem backend Kotlin, Android/Kotlin, React, Angular, bancos de dados, SRE, Terraform, AWS e Kubernetes. AWS e Kubernetes declaram companions e colaboram com Terraform sem misturar decisões de domínio com ownership de HCL e state. Todos vivem em repositórios irmãos com contexto próprio. Veja [docs/specialists.md](docs/specialists.md).
+Os pacotes disponíveis cobrem backend Kotlin, Android/Kotlin, React, Angular, bancos de dados, SRE, Terraform, AWS e Kubernetes. AWS e Kubernetes declaram companions e colaboram com Terraform sem misturar decisões de domínio com ownership de HCL e state. Todos vivem em repositórios públicos `https://github.com/mdnbras/<pacote>` e são obtidos automaticamente pelo instalador. Veja [docs/specialists.md](docs/specialists.md).
 
 ## Steering
 

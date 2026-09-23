@@ -7,8 +7,8 @@ description: Detecte, instale e delegue trabalho a um pacote de agentes especial
 
 1. Leia `specialists/registry.json` e `docs/specialists.md`.
 2. Execute `npm run specialist -- detect --target <projeto>`.
-3. Confirme que o especialista recomendado está `available` e que sua fonte é conhecida.
-4. Verifique `specialist.json` e a origem antes da primeira instalação; pacotes externos são código não confiável até revisão.
+3. Confirme que o especialista recomendado está `available` e aponta para o repositório público esperado em `https://github.com/mdnbras/<pacote>`.
+4. Verifique `specialist.json` e o repositório antes da primeira instalação; pacotes externos são código não confiável até revisão.
 5. Leia `recommendedWith` e `companions`; instale companions somente quando a tarefa realmente atravessar os domínios.
 6. Instale com `npm run specialist -- install <nome> --target <projeto>` quando solicitado ou necessário para a tarefa aprovada.
 7. Confirme os arquivos gerenciados em `<kiro-config>/specialists/installed.json`.
@@ -19,7 +19,7 @@ description: Detecte, instale e delegue trabalho a um pacote de agentes especial
 ## Limites
 
 - Não selecione pacote apenas por palavra-chave; confirme os sinais no projeto.
-- Não instale pacote `planned`, fonte desconhecida ou manifesto divergente.
+- Não instale pacote `planned`, repositório inesperado ou manifesto divergente.
 - Não use `--force` sem revisar arquivos locais modificados.
 - Steering do especialista complementa o projeto; regras do projeto e governança do AISDLC continuam válidas.
 - Remover um pacote não reverte código produzido por seus agentes.

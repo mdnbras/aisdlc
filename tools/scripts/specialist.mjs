@@ -1,6 +1,8 @@
 import { createHash } from "node:crypto";
+import { spawn } from "node:child_process";
 import {
   access,
+  mkdtemp,
   mkdir,
   readFile,
   readdir,
@@ -9,7 +11,8 @@ import {
   stat,
   writeFile,
 } from "node:fs/promises";
-import { dirname, extname, join, relative, resolve, sep } from "node:path";
+import { tmpdir } from "node:os";
+import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const platformRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -89,13 +92,68 @@ function packageDefinition(name) {
   return definition;
 }
 
+function runGit(args) {
+  return new Promise((resolvePromise, rejectPromise) => {
+    const child = spawn("git", args, {
+      stdio: ["ignore", "pipe", "pipe"],
+      windowsHide: true,
+    });
+    let stdout = "";
+    let stderr = "";
+
+    child.stdout.on("data", (chunk) => {
+      stdout += chunk;
+    });
+    child.stderr.on("data", (chunk) => {
+      stderr += chunk;
+    });
+    child.on("error", (error) => {
+      rejectPromise(new Error(`Não foi possível executar git: ${error.message}`));
+    });
+    child.on("close", (code) => {
+      if (code === 0) {
+        resolvePromise(stdout.trim());
+        return;
+      }
+      rejectPromise(new Error(stderr.trim() || `git encerrou com código ${code}.`));
+    });
+  });
+}
+
 async function sourceDirectory(name, definition) {
   const explicitSource = option("--source");
-  if (explicitSource) return resolve(process.cwd(), explicitSource);
-  if (definition.source?.type === "local" && definition.source.path) {
-    return resolve(platformRoot, definition.source.path);
+  if (explicitSource) {
+    const path = resolve(process.cwd(), explicitSource);
+    return { path, source: path, cleanup: async () => {} };
   }
-  throw new Error(`Fonte local não configurada para '${name}'. Use --source <diretório>.`);
+  if (definition.source?.type === "local" && definition.source.path) {
+    const path = resolve(platformRoot, definition.source.path);
+    return { path, source: path, cleanup: async () => {} };
+  }
+  if (definition.source?.type === "github" && definition.source.repository) {
+    const temporaryRoot = await mkdtemp(join(tmpdir(), "aisdlc-specialist-"));
+    const path = join(temporaryRoot, name);
+    const cloneArgs = ["clone", "--depth", "1"];
+    if (definition.source.ref) cloneArgs.push("--branch", definition.source.ref);
+    cloneArgs.push(definition.source.repository, path);
+
+    try {
+      await runGit(cloneArgs);
+    } catch (error) {
+      await rm(temporaryRoot, { recursive: true, force: true });
+      throw new Error(`Falha ao obter '${name}' de ${definition.source.repository}: ${error.message}`);
+    }
+
+    const source = definition.source.ref
+      ? `${definition.source.repository}#${definition.source.ref}`
+      : definition.source.repository;
+    return {
+      path,
+      source,
+      cleanup: () => rm(temporaryRoot, { recursive: true, force: true }),
+    };
+  }
+  throw new Error(`Fonte não configurada para '${name}'. Use --source <diretório>.`);
 }
 
 async function buildInstallPlan(sourceRoot, configDirectory, manifest) {
@@ -124,55 +182,61 @@ async function install(name) {
   }
 
   const targetRoot = resolve(process.cwd(), option("--target") ?? platformRoot);
-  const sourceRoot = await sourceDirectory(name, definition);
-  const manifestPath = join(sourceRoot, "specialist.json");
-  if (!await exists(manifestPath)) throw new Error(`Manifesto ausente: ${manifestPath}`);
+  const resolvedSource = await sourceDirectory(name, definition);
+  const sourceRoot = resolvedSource.path;
 
-  const manifest = await readJson(manifestPath);
-  if (manifest.name !== name) {
-    throw new Error(`Manifesto '${manifest.name}' não corresponde ao pacote '${name}'.`);
-  }
+  try {
+    const manifestPath = join(sourceRoot, "specialist.json");
+    if (!await exists(manifestPath)) throw new Error(`Manifesto ausente: ${manifestPath}`);
 
-  const configDirectory = await resolveConfigDirectory(targetRoot);
-  const state = await readInstallState(configDirectory);
-  const previous = state.packages[name];
-  const force = hasFlag("--force");
-  const plan = await buildInstallPlan(sourceRoot, configDirectory, manifest);
-  const previousFiles = new Map((previous?.files ?? []).map((file) => [file.path, file]));
-
-  for (const item of plan) {
-    if (!await exists(item.targetFile)) continue;
-    const owner = previousFiles.get(item.relativeTarget);
-    if (!owner && !force) {
-      throw new Error(`Colisão com arquivo não gerenciado: ${item.relativeTarget}`);
+    const manifest = await readJson(manifestPath);
+    if (manifest.name !== name) {
+      throw new Error(`Manifesto '${manifest.name}' não corresponde ao pacote '${name}'.`);
     }
-    if (owner && !force) {
-      const currentHash = hash(await readFile(item.targetFile));
-      if (currentHash !== owner.sha256) {
-        throw new Error(`Arquivo instalado foi alterado localmente: ${item.relativeTarget}. Use --force para substituir.`);
+
+    const configDirectory = await resolveConfigDirectory(targetRoot);
+    const state = await readInstallState(configDirectory);
+    const previous = state.packages[name];
+    const force = hasFlag("--force");
+    const plan = await buildInstallPlan(sourceRoot, configDirectory, manifest);
+    const previousFiles = new Map((previous?.files ?? []).map((file) => [file.path, file]));
+
+    for (const item of plan) {
+      if (!await exists(item.targetFile)) continue;
+      const owner = previousFiles.get(item.relativeTarget);
+      if (!owner && !force) {
+        throw new Error(`Colisão com arquivo não gerenciado: ${item.relativeTarget}`);
+      }
+      if (owner && !force) {
+        const currentHash = hash(await readFile(item.targetFile));
+        if (currentHash !== owner.sha256) {
+          throw new Error(`Arquivo instalado foi alterado localmente: ${item.relativeTarget}. Use --force para substituir.`);
+        }
       }
     }
-  }
 
-  const installedFiles = [];
-  for (const item of plan) {
-    const content = await readFile(item.sourceFile);
-    await mkdir(dirname(item.targetFile), { recursive: true });
-    await writeFile(item.targetFile, content);
-    installedFiles.push({ path: item.relativeTarget, sha256: hash(content) });
-  }
+    const installedFiles = [];
+    for (const item of plan) {
+      const content = await readFile(item.sourceFile);
+      await mkdir(dirname(item.targetFile), { recursive: true });
+      await writeFile(item.targetFile, content);
+      installedFiles.push({ path: item.relativeTarget, sha256: hash(content) });
+    }
 
-  state.packages[name] = {
-    version: manifest.version,
-    source: sourceRoot,
-    installedAt: new Date().toISOString(),
-    files: installedFiles,
-  };
-  await writeInstallState(configDirectory, state);
-  console.log(`Especialista '${name}' ${manifest.version} instalado em ${configDirectory}.`);
-  console.log(`${installedFiles.length} arquivo(s) gerenciado(s).`);
-  if ((definition.recommendedWith ?? []).length > 0) {
-    console.log(`Companions recomendados: ${definition.recommendedWith.join(", ")}.`);
+    state.packages[name] = {
+      version: manifest.version,
+      source: resolvedSource.source,
+      installedAt: new Date().toISOString(),
+      files: installedFiles,
+    };
+    await writeInstallState(configDirectory, state);
+    console.log(`Especialista '${name}' ${manifest.version} instalado em ${configDirectory}.`);
+    console.log(`${installedFiles.length} arquivo(s) gerenciado(s).`);
+    if ((definition.recommendedWith ?? []).length > 0) {
+      console.log(`Companions recomendados: ${definition.recommendedWith.join(", ")}.`);
+    }
+  } finally {
+    await resolvedSource.cleanup();
   }
 }
 

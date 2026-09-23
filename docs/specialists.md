@@ -21,7 +21,7 @@ detectar stack -> selecionar pacote -> instalar no .kiro do alvo
 - `planned`: reservado no roadmap, ainda sem fonte instalável.
 - `deprecated`: mantido apenas para migração.
 
-O registro contém capacidade e sinais de detecção. A origem local pode ser substituída por `--source` até que o repositório remoto seja publicado.
+O registro contém capacidade, sinais de detecção e a URL canônica de cada repositório público em `https://github.com/mdnbras/<pacote>`. Durante a instalação, o AISDLC clona o pacote em um diretório temporário, compõe seus artefatos no projeto alvo e registra a URL de origem.
 
 ## Comandos
 
@@ -40,13 +40,15 @@ npm run specialist -- install ai-kubernetes --target C:\MyPath\minha-plataforma
 npm run specialist -- uninstall ai-kotlin-backend --target C:\MyPath\meu-servico
 ```
 
-Para usar outro clone do pacote:
+Para desenvolver ou revisar um pacote usando um clone local, substitua temporariamente a origem registrada:
 
 ```powershell
 npm run specialist -- install ai-kotlin-backend --source C:\repos\ai-kotlin-backend --target C:\MyPath\meu-servico
 ```
 
 O instalador nunca sobrescreve colisões ou arquivos instalados que foram editados localmente. `--force` existe para atualização ou remoção intencional, e deve ser usado somente após revisar as diferenças.
+
+O Git precisa estar disponível no `PATH`. Pacotes públicos não exigem token; autenticação só será solicitada se a visibilidade ou a URL do repositório mudar.
 
 ## Layout de um pacote
 

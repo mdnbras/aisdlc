@@ -138,11 +138,13 @@ if (existsSync(registryPath)) {
 
     for (const [name, specialist] of Object.entries(specialistRegistry.packages ?? {})) {
       const source = specialist.source;
-      if (specialist.status === "available" && source?.type === "local" && source.path) {
-        const localSource = resolve(root, source.path);
-        if (!existsSync(localSource)) {
-          warnings.push(`Fonte local do ${name} não encontrada em ${localSource}. Use --source ao instalar.`);
-        }
+      if (specialist.status !== "available") continue;
+
+      const expectedRepository = `https://github.com/mdnbras/${name}.git`;
+      if (source?.type !== "github") {
+        errors.push(`Especialista disponível '${name}' deve usar uma fonte GitHub.`);
+      } else if (source.repository !== expectedRepository) {
+        errors.push(`Repositório inesperado para '${name}': ${source.repository ?? "ausente"}`);
       }
     }
   } catch (error) {
