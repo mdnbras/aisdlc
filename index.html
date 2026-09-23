@@ -1,0 +1,1324 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AISDLC | Guia da Plataforma</title>
+    <meta
+      name="description"
+      content="Guia completo da plataforma AISDLC: agentes de IA, skills, specs, governança, integrações MCP e operação no Kiro IDE."
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17202a;
+        --muted: #5c6875;
+        --paper: #f7f8f5;
+        --surface: #ffffff;
+        --line: #d9ded8;
+        --blue: #1f5f8b;
+        --teal: #0f766e;
+        --green: #4d7c0f;
+        --red: #b42318;
+        --amber: #a16207;
+        --code-bg: #111827;
+        --code-ink: #f8fafc;
+        --shadow: 0 18px 60px rgba(23, 32, 42, 0.12);
+        --radius: 8px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--paper);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        line-height: 1.6;
+      }
+
+      a {
+        color: var(--blue);
+        text-decoration-thickness: 0.08em;
+        text-underline-offset: 0.18em;
+      }
+
+      a:hover {
+        color: var(--teal);
+      }
+
+      code,
+      pre,
+      kbd {
+        font-family:
+          "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: 1rem;
+        top: -4rem;
+        z-index: 10;
+        background: var(--ink);
+        color: white;
+        padding: 0.65rem 0.9rem;
+        border-radius: var(--radius);
+      }
+
+      .skip-link:focus {
+        top: 1rem;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        border-bottom: 1px solid var(--line);
+        background: rgba(247, 248, 245, 0.94);
+        backdrop-filter: blur(14px);
+      }
+
+      .topbar-inner {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0.85rem 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        min-width: 11rem;
+        color: var(--ink);
+        font-weight: 800;
+        letter-spacing: 0;
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        width: 2rem;
+        height: 2rem;
+        display: grid;
+        place-items: center;
+        border-radius: var(--radius);
+        background: var(--blue);
+        color: white;
+        font-size: 0.82rem;
+        font-weight: 900;
+      }
+
+      .nav {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.15rem;
+        flex-wrap: wrap;
+      }
+
+      .nav a {
+        padding: 0.45rem 0.65rem;
+        border-radius: var(--radius);
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 650;
+      }
+
+      .nav a:hover,
+      .nav a:focus {
+        background: #e8efec;
+        color: var(--ink);
+      }
+
+      .hero {
+        min-height: 86vh;
+        display: grid;
+        align-items: center;
+        border-bottom: 1px solid var(--line);
+        background:
+          linear-gradient(90deg, rgba(247, 248, 245, 0.98) 0%, rgba(247, 248, 245, 0.9) 44%, rgba(247, 248, 245, 0.38) 100%),
+          url("docs/assets/aisdlc-agentic-architecture.png") center right / min(62rem, 70vw) auto no-repeat, #f7f8f5;
+      }
+
+      .hero-inner {
+        max-width: 1180px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 5.5rem 1.25rem 3.5rem;
+      }
+
+      .eyebrow {
+        margin: 0 0 1rem;
+        color: var(--teal);
+        font-size: 0.78rem;
+        font-weight: 850;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        line-height: 1.12;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        max-width: 12ch;
+        font-size: clamp(3rem, 8vw, 6.7rem);
+        font-weight: 900;
+      }
+
+      h2 {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        font-weight: 880;
+      }
+
+      h3 {
+        font-size: 1.2rem;
+        font-weight: 820;
+      }
+
+      .hero-copy {
+        max-width: 46rem;
+        margin: 1.3rem 0 0;
+        color: #31404f;
+        font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 2rem;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.75rem;
+        padding: 0.72rem 1rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        color: var(--ink);
+        font-weight: 750;
+        text-decoration: none;
+        box-shadow: 0 6px 20px rgba(23, 32, 42, 0.08);
+      }
+
+      .button.primary {
+        border-color: var(--blue);
+        background: var(--blue);
+        color: white;
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+        color: var(--ink);
+      }
+
+      .button.primary:hover {
+        color: white;
+        background: #17496d;
+      }
+
+      .section {
+        border-bottom: 1px solid var(--line);
+        background: var(--paper);
+      }
+
+      .section.alt {
+        background: #eef3f0;
+      }
+
+      .container {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 4.5rem 1.25rem;
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: minmax(0, 0.8fr) minmax(18rem, 1fr);
+        gap: 2rem;
+        align-items: start;
+        margin-bottom: 2rem;
+      }
+
+      .section-head p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+
+      .grid {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid.four {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        padding: 1.1rem;
+        box-shadow: 0 10px 30px rgba(23, 32, 42, 0.06);
+      }
+
+      .panel h3 {
+        margin-bottom: 0.45rem;
+      }
+
+      .panel p,
+      .panel ul,
+      .panel ol {
+        margin: 0.5rem 0 0;
+        color: var(--muted);
+      }
+
+      .panel ul,
+      .panel ol {
+        padding-left: 1.1rem;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 1.6rem;
+        padding: 0.2rem 0.55rem;
+        border-radius: 999px;
+        background: #e9f2fb;
+        color: #194f75;
+        font-size: 0.78rem;
+        font-weight: 780;
+      }
+
+      .tag.green {
+        background: #edf7e7;
+        color: #3f6212;
+      }
+
+      .tag.amber {
+        background: #fdf4d8;
+        color: #854d0e;
+      }
+
+      .tag.red {
+        background: #fee4e2;
+        color: #912018;
+      }
+
+      .steps {
+        counter-reset: step;
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .step {
+        counter-increment: step;
+        display: grid;
+        grid-template-columns: 2.35rem minmax(0, 1fr);
+        gap: 0.85rem;
+        align-items: start;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        padding: 1rem;
+      }
+
+      .step::before {
+        content: counter(step);
+        display: grid;
+        place-items: center;
+        width: 2.15rem;
+        height: 2.15rem;
+        border-radius: var(--radius);
+        background: var(--teal);
+        color: white;
+        font-weight: 850;
+      }
+
+      .step h3 {
+        margin-top: 0.15rem;
+      }
+
+      .step p {
+        margin: 0.35rem 0 0;
+        color: var(--muted);
+      }
+
+      .timeline {
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .timeline-item {
+        display: grid;
+        grid-template-columns: 12rem minmax(0, 1fr) 11rem;
+        gap: 0.8rem;
+        align-items: stretch;
+      }
+
+      .timeline-item > div {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        padding: 0.8rem;
+      }
+
+      .timeline-item strong {
+        display: block;
+      }
+
+      .timeline-item span {
+        display: block;
+        margin-top: 0.25rem;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .artifact-map {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(8rem, 1fr));
+        gap: 0.6rem;
+        overflow-x: auto;
+        padding-bottom: 0.3rem;
+      }
+
+      .artifact {
+        min-width: 8rem;
+        border: 1px solid var(--line);
+        border-top: 4px solid var(--blue);
+        border-radius: var(--radius);
+        background: var(--surface);
+        padding: 0.85rem;
+      }
+
+      .artifact:nth-child(2) {
+        border-top-color: var(--teal);
+      }
+
+      .artifact:nth-child(3) {
+        border-top-color: var(--green);
+      }
+
+      .artifact:nth-child(4) {
+        border-top-color: var(--amber);
+      }
+
+      .artifact:nth-child(5) {
+        border-top-color: #7c3aed;
+      }
+
+      .artifact:nth-child(6) {
+        border-top-color: var(--red);
+      }
+
+      .artifact strong {
+        display: block;
+        font-size: 0.95rem;
+      }
+
+      .artifact span {
+        display: block;
+        margin-top: 0.35rem;
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .agent-table,
+      .risk-table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: var(--radius);
+        background: var(--surface);
+        box-shadow: 0 10px 30px rgba(23, 32, 42, 0.06);
+      }
+
+      .agent-table th,
+      .agent-table td,
+      .risk-table th,
+      .risk-table td {
+        border: 1px solid var(--line);
+        padding: 0.75rem;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .agent-table th,
+      .risk-table th {
+        background: #e8efec;
+        color: #22303d;
+        font-size: 0.88rem;
+      }
+
+      .agent-table td,
+      .risk-table td {
+        color: var(--muted);
+      }
+
+      .agent-table code,
+      .risk-table code,
+      p code,
+      li code {
+        padding: 0.1rem 0.28rem;
+        border-radius: 5px;
+        background: #e8efec;
+        color: #22303d;
+        font-size: 0.92em;
+      }
+
+      pre {
+        margin: 0;
+        padding: 1rem;
+        overflow: auto;
+        border-radius: var(--radius);
+        background: var(--code-bg);
+        color: var(--code-ink);
+        font-size: 0.9rem;
+        line-height: 1.55;
+      }
+
+      .code-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .callout {
+        border-left: 5px solid var(--teal);
+        border-radius: var(--radius);
+        background: var(--surface);
+        padding: 1rem 1.15rem;
+        box-shadow: 0 10px 30px rgba(23, 32, 42, 0.06);
+      }
+
+      .callout strong {
+        display: block;
+        margin-bottom: 0.25rem;
+      }
+
+      .callout p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .architecture-figure {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        padding: 1rem;
+        box-shadow: var(--shadow);
+      }
+
+      .architecture-figure figcaption {
+        margin-top: 0.8rem;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .footer {
+        background: #17202a;
+        color: #dbe4ee;
+      }
+
+      .footer .container {
+        padding-block: 2rem;
+      }
+
+      .footer a {
+        color: white;
+      }
+
+      @media (max-width: 980px) {
+        .section-head,
+        .grid.two,
+        .grid.three,
+        .grid.four,
+        .code-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          background:
+            linear-gradient(180deg, rgba(247, 248, 245, 0.98) 0%, rgba(247, 248, 245, 0.92) 64%, rgba(247, 248, 245, 0.72) 100%),
+            url("docs/assets/aisdlc-agentic-architecture.png") bottom center / min(44rem, 94vw) auto no-repeat,
+            #f7f8f5;
+          align-items: start;
+          min-height: 92vh;
+        }
+
+        .hero-inner {
+          padding-top: 4rem;
+          padding-bottom: 16rem;
+        }
+
+        .timeline-item {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .topbar {
+          position: static;
+        }
+
+        .topbar-inner {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .nav {
+          justify-content: flex-start;
+        }
+
+        .container {
+          padding-block: 3rem;
+        }
+
+        .agent-table,
+        .risk-table {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+
+        .hero-inner {
+          padding-bottom: 12rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+    <header class="topbar" aria-label="Navegação principal">
+      <div class="topbar-inner">
+        <a class="brand" href="#topo" aria-label="AISDLC">
+          <span class="brand-mark">AI</span>
+          <span>AISDLC</span>
+        </a>
+        <nav class="nav" aria-label="Seções do guia">
+          <a href="#visao-geral">Visão geral</a>
+          <a href="#inicio-rapido">Início rápido</a>
+          <a href="#fluxo">Fluxo</a>
+          <a href="#agentes">Agentes</a>
+          <a href="#governanca">Governança</a>
+          <a href="#integracoes">Integrações</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="conteudo">
+      <section class="hero" id="topo">
+        <div class="hero-inner">
+          <p class="eyebrow">Guia completo da plataforma</p>
+          <h1>AISDLC</h1>
+          <p class="hero-copy">
+            Plataforma de agentes de IA para conduzir o ciclo completo de
+            desenvolvimento de software no Kiro IDE, com requisitos, arquitetura,
+            implementação, validação, revisão, documentação, release e governança
+            rastreável.
+          </p>
+          <div class="hero-actions" aria-label="Ações principais">
+            <a class="button primary" href="#inicio-rapido">Começar</a>
+            <a class="button" href="README.md">Abrir README</a>
+            <a class="button" href="docs/architecture.md">Arquitetura</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="visao-geral">
+        <div class="container">
+          <div class="section-head">
+            <h2>Visão Geral</h2>
+            <p>
+              O AISDLC é uma camada versionada de agentes, skills, steering,
+              hooks, templates e ferramentas determinísticas sobre o runtime do
+              Kiro. O estado do trabalho fica em arquivos auditáveis, e não na
+              memória temporária de uma conversa.
+            </p>
+          </div>
+
+          <div class="grid four">
+            <article class="panel">
+              <span class="tag">Kiro</span>
+              <h3>Experiência</h3>
+              <p>
+                O Kiro IDE e CLI fornecem chat, seleção de agentes, execução de
+                specs, permissões e interação humana nos gates.
+              </p>
+            </article>
+            <article class="panel">
+              <span class="tag green">Agentes</span>
+              <h3>Orquestração</h3>
+              <p>
+                O <code>sdlc-orchestrator</code> conduz o fluxo e aciona papéis
+                especializados para refinamento, design, implementação e release.
+              </p>
+            </article>
+            <article class="panel">
+              <span class="tag amber">Artefatos</span>
+              <h3>Rastreabilidade</h3>
+              <p>
+                Cada demanda vive em <code>kiro/specs/&lt;slug&gt;/</code> com
+                brief, requisitos, design, tarefas, evidências e release.
+              </p>
+            </article>
+            <article class="panel">
+              <span class="tag red">Gates</span>
+              <h3>Governança</h3>
+              <p>
+                Mudanças destrutivas, segredos, produção, migrações, contratos
+                públicos e merges protegidos nunca são presumidos.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="arquitetura">
+        <div class="container">
+          <div class="section-head">
+            <h2>Arquitetura</h2>
+            <p>
+              A plataforma não cria um serviço externo de workflow nesta fase.
+              A coordenação acontece por composição de arquivos Kiro, comandos
+              locais e integrações MCP explicitamente configuradas.
+            </p>
+          </div>
+
+          <div class="grid two">
+            <figure class="architecture-figure">
+              <img
+                src="docs/assets/aisdlc-agentic-architecture.png"
+                alt="Diagrama da arquitetura agêntica AISDLC"
+              />
+              <figcaption>
+                Arquitetura agêntica com usuário, Kiro, agentes, steering,
+                skills, hooks, specs, MCP e sistemas externos.
+              </figcaption>
+            </figure>
+            <div class="grid">
+              <article class="panel">
+                <h3><code>kiro/</code> como fonte de verdade</h3>
+                <p>
+                  O diretório versionado <code>kiro/</code> contém agentes,
+                  skills, hooks, settings, specs e steering. O diretório
+                  <code>.kiro</code> é apenas um link local para compatibilidade
+                  com o Kiro.
+                </p>
+              </article>
+              <article class="panel">
+                <h3>Artefatos como protocolo</h3>
+                <p>
+                  Agentes produzem e consomem arquivos com contrato definido.
+                  Isso permite auditoria, retomada, revisão independente e troca
+                  de agentes sem perder histórico.
+                </p>
+              </article>
+              <article class="panel">
+                <h3>Automação progressiva</h3>
+                <p>
+                  Autonomia é determinada por risco. Quanto maior a consequência
+                  da ação, mais explícito é o gate humano ou a política externa
+                  necessária.
+                </p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="inicio-rapido">
+        <div class="container">
+          <div class="section-head">
+            <h2>Início Rápido</h2>
+            <p>
+              O projeto não possui dependências npm além do Node.js. Os scripts
+              usam APIs nativas e funcionam como validação e scaffolding da
+              plataforma.
+            </p>
+          </div>
+
+          <div class="steps">
+            <article class="step">
+              <div>
+                <h3>Clone o repositório</h3>
+                <p>Baixe a plataforma e entre na raiz do projeto.</p>
+                <pre><code>git clone https://github.com/mdnbras/aisdlc.git
+cd aisdlc</code></pre>
+              </div>
+            </article>
+            <article class="step">
+              <div>
+                <h3>Crie o link local do Kiro</h3>
+                <p>
+                  O Kiro procura configurações em <code>.kiro/</code>. O AISDLC
+                  versiona a fonte real em <code>kiro/</code>.
+                </p>
+                <div class="code-grid" aria-label="Comandos de link simbólico">
+                  <pre><code># Windows PowerShell
+New-Item -ItemType SymbolicLink -Path .kiro -Target kiro
+
+# Alternativa sem Developer Mode
+New-Item -ItemType Junction -Path .kiro -Target kiro</code></pre>
+                  <pre><code># Windows Command Prompt
+mklink /D .kiro kiro
+
+# Linux e macOS
+ln -s kiro .kiro</code></pre>
+                </div>
+              </div>
+            </article>
+            <article class="step">
+              <div>
+                <h3>Configure MCPs quando necessário</h3>
+                <p>
+                  Copie o exemplo local e ajuste Jira e GitHub conforme as
+                  permissões do seu time.
+                </p>
+                <pre><code>cp kiro/settings/mcp.sample.json kiro/settings/mcp.json</code></pre>
+              </div>
+            </article>
+            <article class="step">
+              <div>
+                <h3>Valide a instalação</h3>
+                <p>
+                  A validação confere estrutura obrigatória, frontmatter,
+                  hooks, settings, specs e regras de segurança.
+                </p>
+                <pre><code>npm run validate</code></pre>
+              </div>
+            </article>
+            <article class="step">
+              <div>
+                <h3>Abra no Kiro e execute o fluxo</h3>
+                <p>
+                  Selecione o agente <code>sdlc-orchestrator</code>, inicie com
+                  <code>/run-sdlc</code> ou crie uma spec nova por script.
+                </p>
+                <pre><code>npm run spec:new -- checkout-expresso "Checkout expresso"</code></pre>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="fluxo">
+        <div class="container">
+          <div class="section-head">
+            <h2>Fluxo de Desenvolvimento</h2>
+            <p>
+              Uma demanda avança somente quando as saídas obrigatórias existem,
+              os critérios de conclusão foram verificados e o gate aplicável foi
+              resolvido.
+            </p>
+          </div>
+
+          <div class="timeline" aria-label="Etapas do SDLC">
+            <article class="timeline-item">
+              <div><strong>1. Refinamento</strong><span>business-refiner</span></div>
+              <div>Transforma ideia, problema, oportunidade, incidente ou feedback em problema, objetivo, métricas e perguntas abertas.</div>
+              <div><code>business-brief.md</code></div>
+            </article>
+            <article class="timeline-item">
+              <div><strong>2. Requisitos</strong><span>product-analyst</span></div>
+              <div>Define histórias, requisitos, critérios de aceite, regras, casos de borda e requisitos não funcionais.</div>
+              <div><code>requirements.md</code></div>
+            </article>
+            <article class="timeline-item">
+              <div><strong>3. Design</strong><span>solution-architect</span></div>
+              <div>Documenta arquitetura, componentes, dados, interfaces, segurança, observabilidade, migração, alternativas e riscos.</div>
+              <div><code>design.md</code></div>
+            </article>
+            <article class="timeline-item">
+              <div><strong>4. Planejamento</strong><span>tech-lead</span></div>
+              <div>Quebra a solução em tarefas pequenas, dependências, critérios de conclusão e validações executáveis.</div>
+              <div><code>tasks.md</code></div>
+            </article>
+            <article class="timeline-item">
+              <div><strong>5. Implementação</strong><span>implementation-agent</span></div>
+              <div>Implementa tarefas aprovadas, cria testes, mantém escopo e atualiza status da entrega.</div>
+              <div><code>workspace-change</code></div>
+            </article>
+            <article class="timeline-item">
+              <div><strong>6. Validação</strong><span>test-agent</span></div>
+              <div>Registra comandos, resultados, cobertura, falhas, validações ausentes e riscos residuais.</div>
+              <div><code>evidence.md</code></div>
+            </article>
+            <article class="timeline-item">
+              <div><strong>7. Revisão</strong><span>review-agent</span></div>
+              <div>Prioriza bugs, regressões, segurança, manutenibilidade, testes e aderência à spec.</div>
+              <div><code>review-decision</code></div>
+            </article>
+            <article class="timeline-item">
+              <div><strong>8. Documentação</strong><span>documentation-agent</span></div>
+              <div>Atualiza documentação técnica, operacional e de uso junto da mudança validada.</div>
+              <div><code>docs-change</code></div>
+            </article>
+            <article class="timeline-item">
+              <div><strong>9. Release</strong><span>release-agent</span></div>
+              <div>Prepara impacto, pré-requisitos, deploy, smoke test, observabilidade e rollback.</div>
+              <div><code>release.md</code></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="artefatos">
+        <div class="container">
+          <div class="section-head">
+            <h2>Artefatos de uma Spec</h2>
+            <p>
+              Cada entrega fica em <code>kiro/specs/&lt;slug&gt;/</code>. Os
+              arquivos funcionam como contrato entre agentes e como trilha de
+              auditoria para decisões, validação e release.
+            </p>
+          </div>
+
+          <div class="artifact-map" aria-label="Mapa de artefatos">
+            <div class="artifact">
+              <strong>business-brief.md</strong>
+              <span>Problema, contexto, público, objetivos, métricas, restrições e perguntas abertas.</span>
+            </div>
+            <div class="artifact">
+              <strong>requirements.md</strong>
+              <span>Requisitos testáveis, histórias, critérios de aceite, regras e não funcionais.</span>
+            </div>
+            <div class="artifact">
+              <strong>design.md</strong>
+              <span>Arquitetura, componentes, dados, interfaces, riscos, alternativas e decisões.</span>
+            </div>
+            <div class="artifact">
+              <strong>tasks.md</strong>
+              <span>Tarefas pequenas, dependências, critérios de conclusão e validações.</span>
+            </div>
+            <div class="artifact">
+              <strong>evidence.md</strong>
+              <span>Comandos executados, resultados, cobertura, achados e riscos residuais.</span>
+            </div>
+            <div class="artifact">
+              <strong>release.md</strong>
+              <span>Resumo, impacto, deploy, smoke test, observabilidade e rollback.</span>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top: 1.4rem">
+            <strong>Identificadores estáveis</strong>
+            <p>
+              Use <code>OBJ-001</code>, <code>REQ-001</code>,
+              <code>AC-001</code>, <code>DEC-001</code> e <code>EVD-001</code>
+              para ligar objetivos, requisitos, decisões, tarefas e evidências.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="agentes">
+        <div class="container">
+          <div class="section-head">
+            <h2>Agentes e Skills</h2>
+            <p>
+              Os perfis ficam em <code>kiro/agents/</code> e herdam o modelo
+              configurado no Kiro. As skills ficam em <code>kiro/skills/</code>
+              e aparecem como comandos para executar procedimentos específicos.
+            </p>
+          </div>
+
+          <table class="agent-table" aria-label="Agentes AISDLC">
+            <thead>
+              <tr>
+                <th>Agente</th>
+                <th>Responsabilidade</th>
+                <th>Autonomia</th>
+                <th>Skill principal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>sdlc-orchestrator</code></td>
+                <td>Conduz a demanda pelo fluxo completo e aplica gates.</td>
+                <td>3</td>
+                <td><code>/run-sdlc</code></td>
+              </tr>
+              <tr>
+                <td><code>business-refiner</code></td>
+                <td>Separa problema de solução e define objetivo mensurável.</td>
+                <td>1</td>
+                <td><code>/refine-business</code></td>
+              </tr>
+              <tr>
+                <td><code>product-analyst</code></td>
+                <td>Especifica requisitos, histórias e critérios de aceite.</td>
+                <td>1</td>
+                <td><code>/write-requirements</code></td>
+              </tr>
+              <tr>
+                <td><code>solution-architect</code></td>
+                <td>Define solução, interfaces, riscos e decisões.</td>
+                <td>1</td>
+                <td><code>/design-solution</code></td>
+              </tr>
+              <tr>
+                <td><code>tech-lead</code></td>
+                <td>Transforma o design em tarefas executáveis.</td>
+                <td>2</td>
+                <td><code>/plan-implementation</code></td>
+              </tr>
+              <tr>
+                <td><code>implementation-agent</code></td>
+                <td>Implementa tarefas aprovadas com testes.</td>
+                <td>2</td>
+                <td><code>/implement-task</code></td>
+              </tr>
+              <tr>
+                <td><code>test-agent</code></td>
+                <td>Valida comportamento e registra evidências.</td>
+                <td>2</td>
+                <td><code>/validate-change</code></td>
+              </tr>
+              <tr>
+                <td><code>review-agent</code></td>
+                <td>Revisa bugs, regressões, segurança e aderência.</td>
+                <td>1</td>
+                <td><code>/review-change</code></td>
+              </tr>
+              <tr>
+                <td><code>documentation-agent</code></td>
+                <td>Atualiza documentação técnica, operacional e de uso.</td>
+                <td>2</td>
+                <td><code>/document-feature</code></td>
+              </tr>
+              <tr>
+                <td><code>release-agent</code></td>
+                <td>Prepara release, deploy, smoke test e rollback.</td>
+                <td>1</td>
+                <td><code>/prepare-release</code></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="grid three" style="margin-top: 1rem">
+            <article class="panel">
+              <h3>Steering</h3>
+              <p>
+                <code>kiro/steering/</code> contém produto, arquitetura,
+                engenharia, qualidade, entrega, autonomia, integrações e workflow.
+              </p>
+            </article>
+            <article class="panel">
+              <h3>Hooks</h3>
+              <p>
+                <code>kiro/hooks/quality-gates.json</code> antecipa validações
+                estruturais e cobrança de evidências ao concluir tarefas.
+              </p>
+            </article>
+            <article class="panel">
+              <h3>Templates</h3>
+              <p>
+                <code>templates/</code> instancia os arquivos padrão de uma spec
+                por meio do script <code>npm run spec:new</code>.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="especialistas">
+        <div class="container">
+          <div class="section-head">
+            <h2>Especialistas por Stack</h2>
+            <p>
+              Especialistas são pacotes Kiro independentes, mantidos em
+              repositórios próprios, que são compostos no <code>.kiro</code> do
+              projeto alvo para atuar sobre a stack correta.
+            </p>
+          </div>
+
+          <div class="grid two">
+            <article class="panel">
+              <h3>Ciclo de uso</h3>
+              <p>
+                Detecte a stack, selecione um pacote, instale no workspace alvo,
+                delegue ao subagente, valide, atualize ou remova quando necessário.
+              </p>
+              <pre><code>npm run specialist -- list
+npm run specialist -- detect --target C:\MyPath\meu-servico
+npm run specialist -- install ai-web-react --target C:\MyPath\meu-app-react
+npm run specialist -- uninstall ai-web-react --target C:\MyPath\meu-app-react</code></pre>
+            </article>
+            <article class="panel">
+              <h3>Pacotes disponíveis</h3>
+              <ul>
+                <li><code>ai-kotlin-backend</code></li>
+                <li><code>ai-web-react</code></li>
+                <li><code>ai-web-angular</code></li>
+                <li><code>ai-kotlin-android</code></li>
+                <li><code>ai-database</code></li>
+                <li><code>ai-sre</code></li>
+                <li><code>ai-terraform</code></li>
+                <li><code>ai-aws</code></li>
+                <li><code>ai-kubernetes</code></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="governanca">
+        <div class="container">
+          <div class="section-head">
+            <h2>Governança</h2>
+            <p>
+              A plataforma combina níveis de autonomia com classificação de risco.
+              O objetivo é permitir execução real sem apagar decisões humanas que
+              exigem contexto de negócio, segurança ou operação.
+            </p>
+          </div>
+
+          <table class="risk-table" aria-label="Classificação de risco">
+            <thead>
+              <tr>
+                <th>Risco</th>
+                <th>Exemplos</th>
+                <th>Gate mínimo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Baixo</strong></td>
+                <td>Documentação, teste isolado, refatoração interna pequena.</td>
+                <td>Validação automática.</td>
+              </tr>
+              <tr>
+                <td><strong>Médio</strong></td>
+                <td>Comportamento de feature, dependência, API interna.</td>
+                <td>Plano e revisão.</td>
+              </tr>
+              <tr>
+                <td><strong>Alto</strong></td>
+                <td>Autenticação, dados pessoais, migração, contrato público, infraestrutura.</td>
+                <td>Aprovação humana antes da implementação.</td>
+              </tr>
+              <tr>
+                <td><strong>Crítico</strong></td>
+                <td>Produção, segredos, exclusão de dados, política de acesso, merge protegido.</td>
+                <td>Autorização explícita no momento da ação.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="grid two" style="margin-top: 1rem">
+            <article class="panel">
+              <h3>Níveis de autonomia</h3>
+              <ul>
+                <li><strong>0 Assistivo:</strong> lê, analisa e propõe.</li>
+                <li><strong>1 Guiado:</strong> escreve artefatos de planejamento e roda comandos somente leitura.</li>
+                <li><strong>2 Operacional:</strong> implementa tarefas aprovadas, cria testes e atualiza documentação.</li>
+                <li><strong>3 Supervisionado:</strong> executa specs aprovadas e corrige falhas dentro do escopo.</li>
+                <li><strong>4 Controlado:</strong> opera entregas repetitivas pré-aprovadas com política explícita.</li>
+              </ul>
+            </article>
+            <article class="panel">
+              <h3>Nunca implícito</h3>
+              <ul>
+                <li>Acessar segredos.</li>
+                <li>Alterar produção.</li>
+                <li>Excluir dados persistentes.</li>
+                <li>Contornar controles de segurança.</li>
+                <li>Fazer merge em branch protegida.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="integracoes">
+        <div class="container">
+          <div class="section-head">
+            <h2>Integrações MCP</h2>
+            <p>
+              O AISDLC declara Jira e GitHub como integrações iniciais de
+              workspace. Leituras são usadas para contexto; escritas externas
+              exigem alvo claro, gate resolvido, confirmação do Kiro e registro
+              em evidência.
+            </p>
+          </div>
+
+          <div class="grid two">
+            <article class="panel">
+              <span class="tag">Jira</span>
+              <h3>Atlassian MCP v2</h3>
+              <p>
+                Usa endpoint <code>https://mcp.atlassian.com/v2/mcp</code> e
+                OAuth 2.1 no navegador. O escopo efetivo depende das permissões
+                do usuário e das políticas Atlassian.
+              </p>
+            </article>
+            <article class="panel">
+              <span class="tag green">GitHub</span>
+              <h3>GitHub Remote MCP</h3>
+              <p>
+                Usa <code>https://api.githubcopilot.com/mcp/</code> com token
+                em <code>GITHUB_PERSONAL_ACCESS_TOKEN</code>, toolsets
+                <code>context</code>, <code>issues</code>,
+                <code>pull_requests</code> e <code>repos</code>.
+              </p>
+            </article>
+          </div>
+
+          <div class="code-grid" style="margin-top: 1rem">
+            <pre><code>{
+  "mcpServers": {
+    "nome-do-servidor": {
+      "url": "https://endpoint-do-mcp",
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}</code></pre>
+            <pre><code># PowerShell
+$env:GITHUB_PERSONAL_ACCESS_TOKEN = Read-Host "GitHub token"
+kiro .
+
+# Linux ou macOS
+read -s GITHUB_PERSONAL_ACCESS_TOKEN
+export GITHUB_PERSONAL_ACCESS_TOKEN
+kiro .</code></pre>
+          </div>
+
+          <div class="callout" style="margin-top: 1.4rem">
+            <strong>Política de segredos</strong>
+            <p>
+              Não escreva tokens em <code>mcp.json</code>, <code>.env</code>,
+              specs, logs ou evidências. Use variáveis de ambiente e prefira
+              personal access tokens de escopo mínimo.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="operacao">
+        <div class="container">
+          <div class="section-head">
+            <h2>Operação Diária</h2>
+            <p>
+              Estes comandos cobrem o ciclo comum de manutenção da plataforma,
+              criação de specs e composição de especialistas.
+            </p>
+          </div>
+
+          <div class="grid three">
+            <article class="panel">
+              <h3>Validar plataforma</h3>
+              <pre><code>npm run validate</code></pre>
+              <p>Use após alterações em agentes, skills, hooks, specs, templates ou settings.</p>
+            </article>
+            <article class="panel">
+              <h3>Criar spec</h3>
+              <pre><code>npm run spec:new -- minha-feature "Minha feature"</code></pre>
+              <p>Instancia artefatos a partir de <code>templates/</code> e impede sobrescrita.</p>
+            </article>
+            <article class="panel">
+              <h3>Especialistas</h3>
+              <pre><code>npm run specialist -- list
+npm run specialist -- detect --target C:\repo\app</code></pre>
+              <p>Lista pacotes e detecta stacks em um workspace consumidor.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="diagnostico">
+        <div class="container">
+          <div class="section-head">
+            <h2>Diagnóstico</h2>
+            <p>
+              Quando algo falhar, investigue primeiro instalação local, link
+              <code>.kiro</code>, configuração MCP, permissões e evidências.
+            </p>
+          </div>
+
+          <div class="grid two">
+            <article class="panel">
+              <h3>Kiro não encontra agentes</h3>
+              <ul>
+                <li>Confirme que <code>.kiro</code> aponta para <code>kiro/</code>.</li>
+                <li>Abra a raiz do repositório no Kiro IDE.</li>
+                <li>Rode <code>npm run validate</code> para verificar estrutura.</li>
+              </ul>
+            </article>
+            <article class="panel">
+              <h3>GitHub retorna 401</h3>
+              <ul>
+                <li>Confira a variável <code>GITHUB_PERSONAL_ACCESS_TOKEN</code>.</li>
+                <li>Verifique validade, escopo e acesso do token ao repositório.</li>
+                <li>Aprove a expansão da variável nas configurações MCP do Kiro.</li>
+              </ul>
+            </article>
+            <article class="panel">
+              <h3>Jira não autentica</h3>
+              <ul>
+                <li>Reconecte o servidor no painel MCP do Kiro.</li>
+                <li>Confirme políticas no Atlassian Admin.</li>
+                <li>Valide se o domínio e o acesso ao MCP estão permitidos.</li>
+              </ul>
+            </article>
+            <article class="panel">
+              <h3>Spec não avança</h3>
+              <ul>
+                <li>Confirme se o artefato de saída da etapa existe.</li>
+                <li>Registre evidência proporcional ao risco.</li>
+                <li>Resolva gates humanos antes de ações de alto impacto.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>
+          AISDLC é uma plataforma versionada para SDLC agêntico no Kiro IDE.
+          Consulte também <a href="README.md">README.md</a>,
+          <a href="docs/development-flow.md">Fluxo de Desenvolvimento</a>,
+          <a href="docs/governance.md">Governança</a> e
+          <a href="docs/integrations.md">Integrações</a>.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
